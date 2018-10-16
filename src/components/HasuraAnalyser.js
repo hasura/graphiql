@@ -9,7 +9,7 @@ import Modal from 'react-modal';
 export class HasuraAnalyser extends React.Component {
   render() {
     return (
-      <Modal isOpen>
+      <Modal isOpen ariaHideApp={false}>
         <h2>Hasura Analyser</h2>
       </Modal>
     );
