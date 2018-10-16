@@ -606,3 +606,148 @@ div.CodeMirror-lint-tooltip > * + * {
 .cm-atom {
   color: #CA9800;
 }
+/* Hasura Analyse modal css */
+.wd25
+{
+  width: 25%;
+  display: inline-block;
+}
+.wd75
+{
+  width: 75%;
+  display: inline-block;
+}
+.wd40
+{
+  width: 40%;
+  display: inline-block;
+}
+.wd60
+{
+  width: 60%;
+  display: inline-block;
+}
+.modalWrapper
+{
+  position: absolute;
+  top: 40px;
+  left: 40px;
+  right: 40px;
+  bottom: 40px;
+  border: 1px solid rgb(204, 204, 204);
+  background: rgb(255, 255, 255);
+  overflow: auto;
+  border-radius: 4px;
+  outline: none;
+  overflow: -webkit-paged-y;
+}
+.myOverlayClass
+{
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  background-color: rgba(255, 255, 255, 0.75);
+  z-index: 100;
+}
+.modalHeader
+{
+  border-bottom: 1px solid #ccc;
+  padding: 10px 20px;
+  position: relative;
+}
+.modalClose
+{
+  position: absolute;
+  right: 20px;
+  top: 10px;
+}
+.modalClose button
+{
+  cursor: pointer;
+  border-radius: 5px;
+}
+.modalClose button:hover
+{
+  background-color: #e7e7e7;
+}
+.modalClose button:focus
+{
+  outline: none;
+}
+.modalBody
+{
+  display: flex;
+  height: calc(100% - 39px);
+}
+.topLevelNodesWrapper
+{
+  border-right: 1px solid #ccc;
+  height: calc(100% - 30px);
+}
+.topLevelNodesWrapper, .analysisWrapper
+{
+  margin-top: 30px;
+}
+.textCenter
+{
+  text-align: center;
+}
+.title
+{
+  padding: 10px 20px;
+  border-bottom: 1px solid #ccc;
+  border-top: 1px solid #ccc;
+}
+.analysisWrapper
+{
+  height: calc(100% - 30px);
+}
+.topLevelNodesWrapper ul
+{
+  padding-inline-start: 0px;
+  -webkit-padding-inline-start: 0px;
+  -moz-padding-inline-start: 0px;
+  -ms-padding-inline-start: 0px;
+  -o-padding-inline-start: 0px;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+.borderRight
+{
+  border-right: 1px solid #ccc;
+}
+.topLevelNodesWrapper ul li
+{
+  list-style-type: none;
+  padding: 10px 0;
+  padding-left: 20px;
+  cursor: pointer;
+}
+.topLevelNodesWrapper ul li.active
+{
+  background-color: #e7e7e7;
+}
+.topLevelNodesWrapper ul li:hover
+{
+  background-color: #e7e7e7;
+}
+.plansWrapper
+{
+  display: flex;
+  height: calc(100% - 40px);
+}
+.plansTitle
+{
+  padding: 10px 20px;
+  background-color: #eee;
+}
+.overflowAuto
+{
+  overflow: auto;
+}
+.codeBlock
+{
+  padding: 10px 20px;
+}
