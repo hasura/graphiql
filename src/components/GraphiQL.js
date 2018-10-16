@@ -34,6 +34,10 @@ import {
   introspectionQuerySansSubscriptions,
 } from '../utility/introspectionQueries';
 
+/* Hasura Analyser */
+import HasuraAnalyser from './HasuraAnalyser';
+/* */
+
 const DEFAULT_DOC_EXPLORER_WIDTH = 350;
 
 /**
@@ -256,6 +260,11 @@ export class GraphiQL extends React.Component {
           title="Show History"
           label="History"
         />
+        <ToolbarButton
+          onClick={this.handleAnalyseClick}
+          title="Analyse Query"
+          label="Analyse"
+        />
 
       </GraphiQL.Toolbar>;
 
@@ -311,6 +320,7 @@ export class GraphiQL extends React.Component {
                 operations={this.state.operations}
               />
               {toolbar}
+              <HasuraAnalyser />
             </div>
             {!this.state.docExplorerOpen &&
               <button
@@ -806,6 +816,16 @@ export class GraphiQL extends React.Component {
       this.props.onToggleHistory(!this.state.historyPaneOpen);
     }
     this.setState({ historyPaneOpen: !this.state.historyPaneOpen });
+  };
+
+  handleAnalyseClick = () => {
+    console.log('Clicked');
+    const editor = this.getQueryEditor();
+    const editorValue = parse(editor.getValue());
+    const prettyVal = print(editorValue);
+    console.log('Value of editor is');
+    console.log(editorValue);
+    console.log(prettyVal);
   };
 
   handleSelectHistoryQuery = (query, variables, operationName) => {
