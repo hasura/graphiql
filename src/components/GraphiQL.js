@@ -35,7 +35,7 @@ import {
 } from '../utility/introspectionQueries';
 
 /* Hasura Analyser */
-import HasuraAnalyser from './HasuraAnalyser';
+import AnalyseButton from './AnalyseButton';
 /* */
 
 const DEFAULT_DOC_EXPLORER_WIDTH = 350;
@@ -123,6 +123,8 @@ export class GraphiQL extends React.Component {
           DEFAULT_DOC_EXPLORER_WIDTH,
       isWaitingForResponse: false,
       subscription: null,
+      showAnalyse: false,
+      analyseQuery: '',
       ...queryFacts,
     };
 
@@ -260,12 +262,7 @@ export class GraphiQL extends React.Component {
           title="Show History"
           label="History"
         />
-        <ToolbarButton
-          onClick={this.handleAnalyseClick}
-          title="Analyse Query"
-          label="Analyse"
-        />
-
+        <AnalyseButton operations={this.state.operations} {...this.state} />
       </GraphiQL.Toolbar>;
 
     const footer = find(children, child => child.type === GraphiQL.Footer);
@@ -320,7 +317,6 @@ export class GraphiQL extends React.Component {
                 operations={this.state.operations}
               />
               {toolbar}
-              <HasuraAnalyser />
             </div>
             {!this.state.docExplorerOpen &&
               <button
@@ -646,6 +642,9 @@ export class GraphiQL extends React.Component {
         operationName,
       });
 
+      console.log('editedQuery');
+      console.log(editedQuery);
+
       // _fetchQuery may return a subscription.
       const subscription = this._fetchQuery(
         editedQuery,
@@ -819,13 +818,23 @@ export class GraphiQL extends React.Component {
   };
 
   handleAnalyseClick = () => {
-    console.log('Clicked');
     const editor = this.getQueryEditor();
     const editorValue = parse(editor.getValue());
-    const prettyVal = print(editorValue);
-    console.log('Value of editor is');
-    console.log(editorValue);
-    console.log(prettyVal);
+    console.log('Here is the thing');
+    console.log(JSON.stringify(editorValue));
+
+    const editedQuery = this.autoCompleteLeafs() || this.state.query;
+    const variables = this.state.variables;
+    let operationName = this.state.operationName;
+    console.log('Query, variable, operationName');
+    console.log(editedQuery);
+    console.log(variables);
+    console.log(operationName);
+    this.setState({ showAnalyse: true, analyseQuery: editorValue });
+  };
+
+  clearAnalyse = () => {
+    this.setState({ showAnalyse: false, analyseQuery: '' });
   };
 
   handleSelectHistoryQuery = (query, variables, operationName) => {
@@ -833,7 +842,6 @@ export class GraphiQL extends React.Component {
     this.handleEditVariables(variables);
     this.handleEditOperationName(operationName);
   };
-
   handleResizeStart = downEvent => {
     if (!this._didClickDragBar(downEvent)) {
       return;
