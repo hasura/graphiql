@@ -8,13 +8,71 @@ import { print, parse } from 'graphql';
 export default class AnalyseButton extends React.Component {
   constructor(props) {
     super(props);
-
+    // Ensure props are correct
+    if (typeof props.analyzeFetcher !== 'function') {
+      throw new TypeError('GraphiQL requires a analyzeFetcher function.');
+    }
     this.state = {
       optionsOpen: false,
       highlight: null,
       isAnalysing: false,
       analyseQuery: '',
     };
+  }
+  render() {
+    const operations = this.props.operations;
+    const optionsOpen = this.state.optionsOpen;
+    const hasOptions = operations && operations.length > 1;
+
+    let options = null;
+    if (hasOptions && optionsOpen) {
+      const highlight = this.state.highlight;
+      let isOptions = false;
+      options = (
+        <ul className="execute-options">
+          {operations.filter(o => o.name && o.name.value).map(operation => {
+            isOptions = true;
+            return (
+              <li
+                key={operation.name ? operation.name.value : '*'}
+                className={(operation === highlight && 'selected') || null}
+                onMouseOver={() => this.setState({ highlight: operation })}
+                onMouseOut={() => this.setState({ highlight: null })}
+                onMouseUp={() => this._onOptionSelected(operation)}>
+                {operation.name ? operation.name.value : '<Unnamed>'}
+              </li>
+            );
+          })}
+        </ul>
+      );
+      options = isOptions ? options : null;
+    }
+    let onMouseDown;
+    if (!this.state.isAnalysing && hasOptions && !optionsOpen) {
+      onMouseDown = this._onOptionsOpen;
+    }
+
+    return (
+      <span className="analyse-button-wrap">
+        <ToolbarButton
+          onClick={this.handleAnalyseClick.bind(this)}
+          onMouseDown={onMouseDown}
+          title="Analyze Query"
+          label="Analyze"
+        />
+        {options}
+        {this.state.analyseQuery ? (
+          <HasuraAnalyser
+            show={this.state.isAnalysing}
+            analyseQuery={this.state.analyseQuery}
+            clearAnalyse={this.clearAnalyse.bind(this)}
+            {...this.props}
+          />
+        ) : (
+          ''
+        )}
+      </span>
+    );
   }
   handleAnalyseClick = () => {
     let parsedQuery = '';
@@ -25,8 +83,7 @@ export default class AnalyseButton extends React.Component {
         return;
       }
     } catch (e) {
-      console.error('Error analysing query:', e.toString());
-      return;
+      throw new Error(`Error analysing query: ${e.message}.`);
     }
     if (this.props.operations && this.props.operations.length > 1) {
       this.setState({ ...this.state, optionsOpen: !this.state.optionsOpen });
@@ -50,30 +107,37 @@ export default class AnalyseButton extends React.Component {
     try {
       parseQuery = parse(this.props.query);
     } catch (e) {
-      console.error('Error analysing query:', e.toString());
-      return;
+      throw new Error(`Error analysing query: ${e.message}.`);
+    }
+
+    let jsonVariables = null;
+    try {
+      jsonVariables =
+        this.props.variables && this.props.variables.trim() !== ''
+          ? JSON.parse(this.props.variables)
+          : null;
+    } catch (e) {
+      throw new Error(`Variables are invalid JSON: ${e.message}.`);
+    }
+
+    if (typeof jsonVariables !== 'object') {
+      throw new Error('Variables are not a JSON object.');
     }
 
     const plainQuery = print(parseQuery);
+    const query = {
+      query: plainQuery,
+      variables: jsonVariables,
+    };
+    if (operation) {
+      query.operationName = operation;
+    }
     const analyseQuery = {
-      // type: 'explain_graphql_query',
-      // args: {
-      query: {
-        query: plainQuery,
-        operationName: operation,
-        variables: this.props.variables || {},
-      },
-      user: {
-        role: 'admin',
-        headers: {
-          'x-hasura-user-id': '1',
-        },
-      },
-      //},
+      query,
     };
     this.setState({
       ...this.state,
-      analyseQuery: analyseQuery,
+      analyseQuery,
       isAnalysing: true,
       optionsOpen: false,
       highlight: null,
@@ -107,59 +171,11 @@ export default class AnalyseButton extends React.Component {
 
     document.addEventListener('mouseup', onMouseUp);
   };
-  render() {
-    const operations = this.props.operations;
-    const optionsOpen = this.state.optionsOpen;
-    const hasOptions = operations && operations.length > 1;
-
-    let options = null;
-    if (hasOptions && optionsOpen) {
-      const highlight = this.state.highlight;
-      options = (
-        <ul className="execute-options">
-          {operations.filter(o => o.name && o.name.value).map(operation => (
-            <li
-              key={operation.name ? operation.name.value : '*'}
-              className={(operation === highlight && 'selected') || null}
-              onMouseOver={() => this.setState({ highlight: operation })}
-              onMouseOut={() => this.setState({ highlight: null })}
-              onMouseUp={() => this._onOptionSelected(operation)}>
-              {operation.name ? operation.name.value : '<Unnamed>'}
-            </li>
-          ))}
-        </ul>
-      );
-    }
-    let onMouseDown;
-    if (!this.props.isAnalysing && hasOptions && !optionsOpen) {
-      onMouseDown = this._onOptionsOpen;
-    }
-
-    return (
-      <span className="analyse-button-wrap">
-        <ToolbarButton
-          onClick={this.handleAnalyseClick.bind(this)}
-          onMouseDown={onMouseDown}
-          title="Analyse Query"
-          label="Analyse"
-        />
-        {options}
-        {!!this.state.analyseQuery ? (
-          <HasuraAnalyser
-            show={this.state.isAnalysing}
-            analyseQuery={this.state.analyseQuery}
-            clearAnalyse={this.clearAnalyse.bind(this)}
-          />
-        ) : (
-          ''
-        )}
-      </span>
-    );
-  }
 }
 
 AnalyseButton.propTypes = {
   operations: PropTypes.array,
   query: PropTypes.string,
   variables: PropTypes.string,
+  analyzeFetcher: PropTypes.func.isRequired,
 };

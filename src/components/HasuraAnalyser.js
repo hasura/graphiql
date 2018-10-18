@@ -8,39 +8,13 @@ export default class HasuraAnalyser extends React.Component {
     super();
     Modal.setAppElement('body');
     this.state = {
-      analyseData: [
-        {
-          field: 'node-1',
-          sql: 'Generated sql 1',
-          plan: ['Execution plan 1'],
-        },
-        {
-          field: 'node-2',
-          sql: 'Generated sql 2',
-          plan: ['Execution plan 2'],
-        },
-        {
-          field: 'node-3',
-          sql: 'Generated sql 3',
-          plan: ['Execution plan 3'],
-        },
-      ],
+      analyseData: [],
       activeNode: 0,
     };
   }
-  fetchAnalyse() {
-    const options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-    };
-    options.body = JSON.stringify(this.props.analyseQuery);
-    return fetch('http://localhost:8080/v1alpha1/graphql/explain', options);
-  }
   componentDidMount() {
-    this.fetchAnalyse(this.props.analyseQuery)
+    this.props
+      .analyzeFetcher(this.props.analyseQuery.query)
       .then(r => {
         if (r.ok) {
           return r.json();
@@ -54,17 +28,12 @@ export default class HasuraAnalyser extends React.Component {
           activeNode: 0,
         });
       })
-      .catch(e => {});
-  }
-  handleAnalyseNodeChange(e) {
-    let nodeKey = e.target.getAttribute('data-key');
-    if (nodeKey) {
-      nodeKey = parseInt(nodeKey);
-      this.setState({ ...this.state, activeNode: nodeKey });
-    }
+      .catch(e => {
+        throw new Error(`Unable to fetch: ${e.message}.`);
+      });
   }
   render() {
-    const { show, analyseQuery, clearAnalyse } = this.props;
+    const { show, clearAnalyse } = this.props;
     const analysisList = this.state.analyseData.map((analysis, i) => {
       return (
         <li
@@ -83,17 +52,17 @@ export default class HasuraAnalyser extends React.Component {
         overlayClassName="myOverlayClass"
         isOpen={show}>
         <div className="modalHeader">
-          <div className="modalTitle">Query Analysis</div>
+          <div className="modalTitle">{'Query Analysis'}</div>
           <div className="modalClose">
             <button onClick={clearAnalyse} className="form-control">
-              x
+              {'x'}
             </button>
           </div>
         </div>
         <div className="modalBody">
           <div className="wd25">
             <div className="topLevelNodesWrapper">
-              <div className="title">Top level nodes</div>
+              <div className="title">{'Top level nodes'}</div>
               <ul>{analysisList}</ul>
             </div>
           </div>
@@ -101,25 +70,54 @@ export default class HasuraAnalyser extends React.Component {
             <div className="analysisWrapper">
               <div className="plansWrapper">
                 <div className="overflowAuto">
-                  <div className="plansTitle">Generated SQL</div>
+                  <div className="plansTitle">{'Generated SQL'}</div>
                   <div className="codeBlock">
-                    <code>
-                      {this.state.activeNode >= 0
-                        ? this.state.analyseData[this.state.activeNode].sql
-                        : ''}
-                    </code>
+                    <pre>
+                      <code
+                        dangerouslySetInnerHTML={{
+                          __html:
+                            this.state.activeNode >= 0 &&
+                            this.state.analyseData.length > 0 &&
+                            window.hljs &&
+                            window.sqlFormatter &&
+                            window.hljs.highlight(
+                              'sql',
+                              window.sqlFormatter.format(
+                                this.state.analyseData[this.state.activeNode]
+                                  .sql,
+                                { language: 'sql' },
+                              ),
+                            ).value,
+                        }}
+                      />
+                    </pre>
                   </div>
                 </div>
                 <div className="overflowAuto">
-                  <div className="plansTitle">Execution Plan</div>
+                  <div className="plansTitle">{'Execution Plan'}</div>
                   <div className="codeBlock">
-                    <code>
-                      {this.state.activeNode >= 0
-                        ? this.state.analyseData[
-                            this.state.activeNode
-                          ].plan.join('')
-                        : ''}
-                    </code>
+                    {/*
+                    <pre>
+                      <code>
+                        {this.state.activeNode >= 0
+                          && this.state.analyseData.length > 0
+                          ? this.state.analyseData[
+                              this.state.activeNode
+                            ].plan.map((k, i) => <div key={ i }>{k}</div> )
+                          : ''}
+                      </code>
+                    </pre>
+                    */}
+                    <pre>
+                      <code>
+                        {this.state.activeNode >= 0 &&
+                        this.state.analyseData.length > 0
+                          ? this.state.analyseData[
+                              this.state.activeNode
+                            ].plan.join('\n')
+                          : ''}
+                      </code>
+                    </pre>
                   </div>
                 </div>
               </div>
@@ -129,10 +127,32 @@ export default class HasuraAnalyser extends React.Component {
       </Modal>
     );
   }
+  /*
+  fetchAnalyse() {
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    };
+    options.body = JSON.stringify(this.props.analyseQuery);
+    return fetch('http://localhost:8080/v1alpha1/graphql/explain', options);
+  }
+  */
+
+  handleAnalyseNodeChange(e) {
+    let nodeKey = e.target.getAttribute('data-key');
+    if (nodeKey) {
+      nodeKey = parseInt(nodeKey, 10);
+      this.setState({ ...this.state, activeNode: nodeKey });
+    }
+  }
 }
 
 HasuraAnalyser.propTypes = {
   show: PropTypes.bool.isRequired,
   analyseQuery: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   clearAnalyse: PropTypes.func.isRequired,
+  analyzeFetcher: PropTypes.func.isRequired,
 };

@@ -48,6 +48,8 @@ const DEFAULT_DOC_EXPLORER_WIDTH = 350;
 export class GraphiQL extends React.Component {
   static propTypes = {
     fetcher: PropTypes.func.isRequired,
+    analyzeFetcher: PropTypes.func,
+    supportAnalyze: PropTypes.bool,
     schema: PropTypes.instanceOf(GraphQLSchema),
     query: PropTypes.string,
     variables: PropTypes.string,
@@ -266,7 +268,13 @@ export class GraphiQL extends React.Component {
           title="Show History"
           label="History"
         />
-        <AnalyseButton operations={this.state.operations} {...this.state} />
+        {this.props.supportAnalyze ? (
+          <AnalyseButton
+            operations={this.state.operations}
+            analyzeFetcher={this.props.analyzeFetcher}
+            {...this.state}
+          />
+        ) : null}
       </GraphiQL.Toolbar>
     );
 

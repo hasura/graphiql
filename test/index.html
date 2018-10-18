@@ -26,6 +26,11 @@
     <script src="./vendor/react-16.5.2.js"></script>
     <script src="./vendor/react-dom-16.5.2.js"></script>
 
+    <link rel="stylesheet"
+          href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.13.1/build/styles/default.min.css" />                                              
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.13.1/build/highlight.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/sql-formatter@latest/dist/sql-formatter.min.js"></script>
+
     <!-- Load each file individually for better debugging  -->
     <!-- Note that in practice, a compiled graphiql.css is included -->
     <link rel="stylesheet" href="css/app.css" />
@@ -125,10 +130,33 @@
         });
       }
 
+      function analyzeFetcher(header) {
+        return (query) => {
+          const editedQuery = {
+            query,
+          };
+          let user = {};
+          user.role = 'admin';
+          user.headers = header;
+          editedQuery.user = user;
+          return fetch('http://localhost:8080/v1alpha1/graphql/explain', {
+            method: 'post',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(editedQuery),
+            credentials: 'include',
+          });
+        }
+      }
+
       // Render <GraphiQL /> into the body.
       ReactDOM.render(
         React.createElement(GraphiQL, {
           fetcher: graphQLFetcher,
+          analyzeFetcher: analyzeFetcher({}),
+          supportAnalyze: true,
           query: parameters.query,
           variables: parameters.variables,
           operationName: parameters.operationName,

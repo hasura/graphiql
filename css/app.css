@@ -636,7 +636,6 @@ div.CodeMirror-lint-tooltip > * + * {
   bottom: 40px;
   border: 1px solid rgb(204, 204, 204);
   background: rgb(255, 255, 255);
-  overflow: auto;
   border-radius: 4px;
   outline: none;
   overflow: -webkit-paged-y;
@@ -700,7 +699,7 @@ div.CodeMirror-lint-tooltip > * + * {
 .topLevelNodesWrapper
 {
   border-right: 1px solid #ccc;
-  height: calc(100% - 30px);
+  height: calc(100% - 42px);
 }
 
 .textCenter
@@ -773,13 +772,28 @@ div.CodeMirror-lint-tooltip > * + * {
 .codeBlock
 {
   padding: 10px 20px;
-  width: 60%;
+  width: 90%;
   background-color: rgb(253, 249, 237);
   margin: 20px;
   border-radius: 5px;
   max-height: 150px;
   overflow: auto;
   margin-top: 10px;
+}
+
+.codeBlock pre {
+  display: block;
+  padding: 0px;
+  margin: 0px;
+  font-size: 13px;
+  line-height: unset;
+  word-break: unset;
+  word-wrap: unset;
+  color: #000;
+  background: none;
+  border: none;
+  border-radius: 0;
+  overflow: unset;
 }
 
 .codeBlock code {
