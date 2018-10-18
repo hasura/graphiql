@@ -4,11 +4,10 @@ import PropTypes from 'prop-types';
 
 import Modal from 'react-modal';
 
-// Modal.setAppElement('#graphiql')
-
 export default class HasuraAnalyser extends React.Component {
   constructor() {
     super();
+    Modal.setAppElement('body');
     this.state = {
       analyseData: {
         data: [
@@ -64,7 +63,9 @@ export default class HasuraAnalyser extends React.Component {
       errors: [],
     };
 
-    this.fetchAnalyse(this.props.analyseQuery).then(r => {}).catch(e => {});
+    this.fetchAnalyse(this.props.analyseQuery)
+      .then(r => {})
+      .catch(e => {});
     this.setState({ ...this.state, analyseData: dData, activeNode: 0 });
   }
   handleAnalyseNodeChange(e) {
@@ -91,37 +92,28 @@ export default class HasuraAnalyser extends React.Component {
       <Modal
         className="modalWrapper"
         overlayClassName="myOverlayClass"
-        isOpen={show}
-        ariaHideApp={false}>
+        isOpen={show}>
         <div className="modalHeader">
-          <div className="modalTitle">
-            Query Analysis
-          </div>
+          <div className="modalTitle">Query Analysis</div>
           <div className="modalClose">
-            <button onClick={clearAnalyse} className="form-control">X</button>
+            <button onClick={clearAnalyse} className="form-control">
+              X
+            </button>
           </div>
         </div>
         <div className="modalBody">
           <div className="wd25">
             <div className="topLevelNodesWrapper">
-              <div className="title">
-                Top level nodes
-              </div>
-              <ul>
-                {analysisList}
-              </ul>
+              <div className="title">Top level nodes</div>
+              <ul>{analysisList}</ul>
             </div>
           </div>
           <div className="wd75">
             <div className="analysisWrapper">
-              <div className="title textCenter">
-                Analysis
-              </div>
+              <div className="title textCenter">Analysis</div>
               <div className="plansWrapper">
                 <div className="wd40 borderRight overflowAuto">
-                  <div className="plansTitle">
-                    Generated SQL
-                  </div>
+                  <div className="plansTitle">Generated SQL</div>
                   <div className="codeBlock">
                     {this.state.activeNode >= 0
                       ? this.state.analyseData.data[this.state.activeNode].sql
@@ -129,9 +121,7 @@ export default class HasuraAnalyser extends React.Component {
                   </div>
                 </div>
                 <div className="wd60 overflowAuto">
-                  <div className="plansTitle">
-                    Execution Plan
-                  </div>
+                  <div className="plansTitle">Execution Plan</div>
                   <div className="codeBlock">
                     {this.state.activeNode >= 0
                       ? this.state.analyseData.data[this.state.activeNode].plan

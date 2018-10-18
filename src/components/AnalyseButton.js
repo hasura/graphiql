@@ -81,17 +81,11 @@ export default class AnalyseButton extends React.Component {
   };
   _onOptionSelected = operation => {
     this.setState({ optionsOpen: false });
-    console.log('Operation Name');
-    console.log(operation);
-    console.log(this.props.query);
-    console.log(this.props.variables);
     this.onRun(operation.name && operation.name.value);
   };
 
   _onOptionsOpen = downEvent => {
     let initialPress = true;
-    console.log('DownEvent');
-    console.log(downEvent);
     const downTarget = downEvent.target;
     this.setState({ highlight: null, optionsOpen: true });
 
@@ -123,7 +117,7 @@ export default class AnalyseButton extends React.Component {
       const highlight = this.state.highlight;
       options = (
         <ul className="execute-options">
-          {operations.filter(o => o.name && o.name.value).map(operation =>
+          {operations.filter(o => o.name && o.name.value).map(operation => (
             <li
               key={operation.name ? operation.name.value : '*'}
               className={(operation === highlight && 'selected') || null}
@@ -131,8 +125,8 @@ export default class AnalyseButton extends React.Component {
               onMouseOut={() => this.setState({ highlight: null })}
               onMouseUp={() => this._onOptionSelected(operation)}>
               {operation.name ? operation.name.value : '<Unnamed>'}
-            </li>,
-          )}
+            </li>
+          ))}
         </ul>
       );
     }
@@ -150,14 +144,15 @@ export default class AnalyseButton extends React.Component {
           label="Analyse"
         />
         {options}
-        {!!this.state.analyseQuery
-          ? <HasuraAnalyser
-              show={this.state.isAnalysing}
-              analyseQuery={this.state.analyseQuery}
-              clearAnalyse={this.clearAnalyse.bind(this)}
-            />
-          : ''}
-
+        {!!this.state.analyseQuery ? (
+          <HasuraAnalyser
+            show={this.state.isAnalysing}
+            analyseQuery={this.state.analyseQuery}
+            clearAnalyse={this.clearAnalyse.bind(this)}
+          />
+        ) : (
+          ''
+        )}
       </span>
     );
   }

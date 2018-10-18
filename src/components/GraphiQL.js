@@ -82,28 +82,33 @@ export class GraphiQL extends React.Component {
     this._storage = new StorageAPI(props.storage);
 
     // Determine the initial query to display.
-    const query = props.query !== undefined
-      ? props.query
-      : this._storage.get('query') !== null
-        ? this._storage.get('query')
-        : props.defaultQuery !== undefined ? props.defaultQuery : defaultQuery;
+    const query =
+      props.query !== undefined
+        ? props.query
+        : this._storage.get('query') !== null
+          ? this._storage.get('query')
+          : props.defaultQuery !== undefined
+            ? props.defaultQuery
+            : defaultQuery;
 
     // Get the initial query facts.
     const queryFacts = getQueryFacts(props.schema, query);
 
     // Determine the initial variables to display.
-    const variables = props.variables !== undefined
-      ? props.variables
-      : this._storage.get('variables');
+    const variables =
+      props.variables !== undefined
+        ? props.variables
+        : this._storage.get('variables');
 
     // Determine the initial operationName to use.
-    const operationName = props.operationName !== undefined
-      ? props.operationName
-      : getSelectedOperationName(
-          null,
-          this._storage.get('operationName'),
-          queryFacts && queryFacts.operations,
-        );
+    const operationName =
+      props.operationName !== undefined
+        ? props.operationName
+        : getSelectedOperationName(
+            null,
+            this._storage.get('operationName'),
+            queryFacts && queryFacts.operations,
+          );
 
     // Initialize state
     this.state = {
@@ -120,11 +125,9 @@ export class GraphiQL extends React.Component {
       historyPaneOpen: this._storage.get('historyPaneOpen') === 'true' || false,
       docExplorerWidth:
         Number(this._storage.get('docExplorerWidth')) ||
-          DEFAULT_DOC_EXPLORER_WIDTH,
+        DEFAULT_DOC_EXPLORER_WIDTH,
       isWaitingForResponse: false,
       subscription: null,
-      showAnalyse: false,
-      analyseQuery: '',
       ...queryFacts,
     };
 
@@ -245,12 +248,14 @@ export class GraphiQL extends React.Component {
   render() {
     const children = React.Children.toArray(this.props.children);
 
-    const logo =
-      find(children, child => child.type === GraphiQL.Logo) ||
-      <GraphiQL.Logo />;
+    const logo = find(children, child => child.type === GraphiQL.Logo) || (
+      <GraphiQL.Logo />
+    );
 
-    const toolbar =
-      find(children, child => child.type === GraphiQL.Toolbar) ||
+    const toolbar = find(
+      children,
+      child => child.type === GraphiQL.Toolbar,
+    ) || (
       <GraphiQL.Toolbar>
         <ToolbarButton
           onClick={this.handlePrettifyQuery}
@@ -263,7 +268,8 @@ export class GraphiQL extends React.Component {
           label="History"
         />
         <AnalyseButton operations={this.state.operations} {...this.state} />
-      </GraphiQL.Toolbar>;
+      </GraphiQL.Toolbar>
+    );
 
     const footer = find(children, child => child.type === GraphiQL.Footer);
 
@@ -318,12 +324,13 @@ export class GraphiQL extends React.Component {
               />
               {toolbar}
             </div>
-            {!this.state.docExplorerOpen &&
+            {!this.state.docExplorerOpen && (
               <button
                 className="docExplorerShow"
                 onClick={this.handleToggleDocs}>
                 {'Docs'}
-              </button>}
+              </button>
+            )}
           </div>
           <div
             ref={n => {
@@ -368,10 +375,11 @@ export class GraphiQL extends React.Component {
               </div>
             </div>
             <div className="resultWrap">
-              {this.state.isWaitingForResponse &&
+              {this.state.isWaitingForResponse && (
                 <div className="spinner-container">
                   <div className="spinner" />
-                </div>}
+                </div>
+              )}
               <ResultViewer
                 ref={c => {
                   this.resultComponent = c;
@@ -523,9 +531,10 @@ export class GraphiQL extends React.Component {
           const queryFacts = getQueryFacts(schema, this.state.query);
           this.setState({ schema, ...queryFacts });
         } else {
-          const responseString = typeof result === 'string'
-            ? result
-            : JSON.stringify(result, null, 2);
+          const responseString =
+            typeof result === 'string'
+              ? result
+              : JSON.stringify(result, null, 2);
           this.setState({
             // Set schema to `null` to explicitly indicate that no schema exists.
             schema: null,
@@ -546,9 +555,8 @@ export class GraphiQL extends React.Component {
     let jsonVariables = null;
 
     try {
-      jsonVariables = variables && variables.trim() !== ''
-        ? JSON.parse(variables)
-        : null;
+      jsonVariables =
+        variables && variables.trim() !== '' ? JSON.parse(variables) : null;
     } catch (error) {
       throw new Error(`Variables are invalid JSON: ${error.message}.`);
     }
@@ -641,9 +649,6 @@ export class GraphiQL extends React.Component {
         response: null,
         operationName,
       });
-
-      console.log('editedQuery');
-      console.log(editedQuery);
 
       // _fetchQuery may return a subscription.
       const subscription = this._fetchQuery(
@@ -817,26 +822,6 @@ export class GraphiQL extends React.Component {
     this.setState({ historyPaneOpen: !this.state.historyPaneOpen });
   };
 
-  handleAnalyseClick = () => {
-    const editor = this.getQueryEditor();
-    const editorValue = parse(editor.getValue());
-    console.log('Here is the thing');
-    console.log(JSON.stringify(editorValue));
-
-    const editedQuery = this.autoCompleteLeafs() || this.state.query;
-    const variables = this.state.variables;
-    let operationName = this.state.operationName;
-    console.log('Query, variable, operationName');
-    console.log(editedQuery);
-    console.log(variables);
-    console.log(operationName);
-    this.setState({ showAnalyse: true, analyseQuery: editorValue });
-  };
-
-  clearAnalyse = () => {
-    this.setState({ showAnalyse: false, analyseQuery: '' });
-  };
-
   handleSelectHistoryQuery = (query, variables, operationName) => {
     this.handleEditQuery(query);
     this.handleEditVariables(variables);
@@ -995,18 +980,20 @@ export class GraphiQL extends React.Component {
 GraphiQL.Logo = function GraphiQLLogo(props) {
   return (
     <div className="title">
-      {props.children || <span>{'Graph'}<em>{'i'}</em>{'QL'}</span>}
+      {props.children || (
+        <span>
+          {'Graph'}
+          <em>{'i'}</em>
+          {'QL'}
+        </span>
+      )}
     </div>
   );
 };
 
 // Configure the UI by providing this Component as a child of GraphiQL.
 GraphiQL.Toolbar = function GraphiQLToolbar(props) {
-  return (
-    <div className="toolbar">
-      {props.children}
-    </div>
-  );
+  return <div className="toolbar">{props.children}</div>;
 };
 
 // Export main windows/panes to be used separately if desired.
@@ -1031,11 +1018,7 @@ GraphiQL.SelectOption = ToolbarSelectOption;
 
 // Configure the UI by providing this Component as a child of GraphiQL.
 GraphiQL.Footer = function GraphiQLFooter(props) {
-  return (
-    <div className="footer">
-      {props.children}
-    </div>
-  );
+  return <div className="footer">{props.children}</div>;
 };
 
 const defaultQuery = `# Welcome to GraphiQL
