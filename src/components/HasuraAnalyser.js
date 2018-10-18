@@ -19,7 +19,9 @@ export default class HasuraAnalyser extends React.Component {
         if (r.ok) {
           return r.json();
         }
-        return Promise.reject('Invalid response json returned');
+        return r.text().then(r => {
+          return Promise.reject(new Error(r));
+        });
       })
       .then(data => {
         this.setState({
@@ -29,7 +31,9 @@ export default class HasuraAnalyser extends React.Component {
         });
       })
       .catch(e => {
-        throw new Error(`Unable to fetch: ${e.message}.`);
+        const errorMessage = `Unable to fetch: ${e.message}.`;
+        alert(errorMessage);
+        this.props.clearAnalyse();
       });
   }
   render() {
@@ -50,7 +54,7 @@ export default class HasuraAnalyser extends React.Component {
       <Modal
         className="modalWrapper"
         overlayClassName="myOverlayClass"
-        isOpen={show}>
+        isOpen={show && this.state.analyseData.length > 0}>
         <div className="modalHeader">
           <div className="modalTitle">{'Query Analysis'}</div>
           <div className="modalClose">
