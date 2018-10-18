@@ -56,20 +56,20 @@ export default class AnalyseButton extends React.Component {
 
     const plainQuery = print(parseQuery);
     const analyseQuery = {
-      type: 'explain_graphql_query',
-      args: {
-        query: {
-          query: plainQuery,
-          operationName: operation,
-          variableValues: this.props.variables || {},
-        },
-        user: {
-          role: 'whatever',
-          params: {
-            'x-hasura-user-id': '1',
-          },
+      // type: 'explain_graphql_query',
+      // args: {
+      query: {
+        query: plainQuery,
+        operationName: operation,
+        variables: this.props.variables || {},
+      },
+      user: {
+        role: 'admin',
+        headers: {
+          'x-hasura-user-id': '1',
         },
       },
+      //},
     };
     this.setState({
       ...this.state,

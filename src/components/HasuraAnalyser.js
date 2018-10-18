@@ -9,29 +9,26 @@ export default class HasuraAnalyser extends React.Component {
     super();
     Modal.setAppElement('body');
     this.state = {
-      analyseData: {
-        data: [
-          {
-            id: 1,
-            field: 'node-1',
-            generated_sql: 'Generated sql 1',
-            execution_plan: 'Execution plan 1',
-          },
-          {
-            id: 2,
-            field: 'node-2',
-            generated_sql: 'Generated sql 2',
-            execution_plan: 'Execution plan 2',
-          },
-          {
-            id: 3,
-            field: 'node-3',
-            generated_sql: 'Generated sql 3',
-            execution_plan: 'Execution plan 3',
-          },
-        ],
-        errors: [],
-      },
+      analyseData: [
+        {
+          id: 1,
+          field: 'node-1',
+          generated_sql: 'Generated sql 1',
+          execution_plan: 'Execution plan 1',
+        },
+        {
+          id: 2,
+          field: 'node-2',
+          generated_sql: 'Generated sql 2',
+          execution_plan: 'Execution plan 2',
+        },
+        {
+          id: 3,
+          field: 'node-3',
+          generated_sql: 'Generated sql 3',
+          execution_plan: 'Execution plan 3',
+        },
+      ],
       activeNode: 0,
     };
   }
@@ -44,7 +41,7 @@ export default class HasuraAnalyser extends React.Component {
       credentials: 'include',
     };
     options.body = JSON.stringify(this.props.analyseQuery);
-    return fetch('https://hasura-graphql-2.herokuapp.com/v1/query', options);
+    return fetch('http://localhost:8080/v1alpha1/graphql/explain', options);
   }
   componentDidMount() {
     const dData = {
@@ -64,9 +61,20 @@ export default class HasuraAnalyser extends React.Component {
     };
 
     this.fetchAnalyse(this.props.analyseQuery)
-      .then(r => {})
+      .then(r => {
+        if (r.ok) {
+          return r.json();
+        }
+        return Promise.reject('Invalid response json returned');
+      })
+      .then(data => {
+        this.setState({
+          ...this.state,
+          analyseData: data,
+          activeNode: 0,
+        });
+      })
       .catch(e => {});
-    this.setState({ ...this.state, analyseData: dData, activeNode: 0 });
   }
   handleAnalyseNodeChange(e) {
     let nodeKey = e.target.getAttribute('data-key');
@@ -77,7 +85,7 @@ export default class HasuraAnalyser extends React.Component {
   }
   render() {
     const { show, analyseQuery, clearAnalyse } = this.props;
-    const analysisList = this.state.analyseData.data.map((analysis, i) => {
+    const analysisList = this.state.analyseData.map((analysis, i) => {
       return (
         <li
           className={i === this.state.activeNode ? 'active' : ''}
@@ -116,7 +124,7 @@ export default class HasuraAnalyser extends React.Component {
                   <div className="plansTitle">Generated SQL</div>
                   <div className="codeBlock">
                     {this.state.activeNode >= 0
-                      ? this.state.analyseData.data[this.state.activeNode].sql
+                      ? this.state.analyseData[this.state.activeNode].sql
                       : ''}
                   </div>
                 </div>
@@ -124,7 +132,7 @@ export default class HasuraAnalyser extends React.Component {
                   <div className="plansTitle">Execution Plan</div>
                   <div className="codeBlock">
                     {this.state.activeNode >= 0
-                      ? this.state.analyseData.data[this.state.activeNode].plan
+                      ? this.state.analyseData[this.state.activeNode].plan
                       : ''}
                   </div>
                 </div>
