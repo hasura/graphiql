@@ -679,6 +679,8 @@ div.CodeMirror-lint-tooltip > * + * {
   font-size: 16px;
   font-weight: 700;
   color: #ccc;
+  padding: 0px;
+  height: auto;
 }
 .modalClose button:hover
 {
@@ -712,6 +714,7 @@ div.CodeMirror-lint-tooltip > * + * {
   margin-bottom: 20px;
   color: #767e93;
   font-weight: 600;
+  font-size: 16px;
 }
 .analysisWrapper
 {
@@ -738,6 +741,12 @@ div.CodeMirror-lint-tooltip > * + * {
   padding-left: 20px;
   cursor: pointer;
 }
+
+.topLevelNodesWrapper ul li i {
+  margin-right: 5px;
+  font-size: 12px;
+}
+
 .topLevelNodesWrapper ul li.active
 {
   color: #fd9540;
@@ -754,6 +763,8 @@ div.CodeMirror-lint-tooltip > * + * {
 {
   padding: 10px 20px;
   padding-bottom: 0;
+  color: #767e93;
+  font-weight: 600;
 }
 .overflowAuto
 {
@@ -763,6 +774,17 @@ div.CodeMirror-lint-tooltip > * + * {
 {
   padding: 10px 20px;
   width: 60%;
+  background-color: rgb(253, 249, 237);
+  margin: 20px;
+  border-radius: 5px;
+  max-height: 150px;
+  overflow: auto;
+  margin-top: 10px;
+}
+
+.codeBlock code {
+  color: #000;
+  background: none;
 }
 
 .graphiql-container .analyse-button-wrap {

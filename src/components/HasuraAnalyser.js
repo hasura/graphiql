@@ -3,7 +3,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Modal from 'react-modal';
-import AceEditor from 'react-ace';
 export default class HasuraAnalyser extends React.Component {
   constructor() {
     super();
@@ -11,22 +10,19 @@ export default class HasuraAnalyser extends React.Component {
     this.state = {
       analyseData: [
         {
-          id: 1,
           field: 'node-1',
-          generated_sql: 'Generated sql 1',
-          execution_plan: 'Execution plan 1',
+          sql: 'Generated sql 1',
+          plan: ['Execution plan 1'],
         },
         {
-          id: 2,
           field: 'node-2',
-          generated_sql: 'Generated sql 2',
-          execution_plan: 'Execution plan 2',
+          sql: 'Generated sql 2',
+          plan: ['Execution plan 2'],
         },
         {
-          id: 3,
           field: 'node-3',
-          generated_sql: 'Generated sql 3',
-          execution_plan: 'Execution plan 3',
+          sql: 'Generated sql 3',
+          plan: ['Execution plan 3'],
         },
       ],
       activeNode: 0,
@@ -44,22 +40,6 @@ export default class HasuraAnalyser extends React.Component {
     return fetch('http://localhost:8080/v1alpha1/graphql/explain', options);
   }
   componentDidMount() {
-    const dData = {
-      data: [
-        {
-          field: 'a',
-          sql: 'the generated sql for field a',
-          plan: 'the plan for field a',
-        },
-        {
-          field: 'b',
-          sql: 'the generated sql for field b',
-          plan: 'the plan for field b',
-        },
-      ],
-      errors: [],
-    };
-
     this.fetchAnalyse(this.props.analyseQuery)
       .then(r => {
         if (r.ok) {
@@ -92,6 +72,7 @@ export default class HasuraAnalyser extends React.Component {
           key={i}
           data-key={i}
           onClick={this.handleAnalyseNodeChange.bind(this)}>
+          <i className="fa fa-table" aria-hidden="true" />
           {analysis.field}
         </li>
       );
@@ -122,41 +103,23 @@ export default class HasuraAnalyser extends React.Component {
                 <div className="overflowAuto">
                   <div className="plansTitle">Generated SQL</div>
                   <div className="codeBlock">
-                    <AceEditor
-                      mode="json"
-                      theme="github"
-                      name="payload"
-                      value={
-                        this.state.activeNode >= 0
-                          ? this.state.analyseData[this.state.activeNode].sql
-                          : ''
-                      }
-                      minLines={4}
-                      maxLines={100}
-                      width="100%"
-                      showPrintMargin={false}
-                      showGutter={false}
-                    />
+                    <code>
+                      {this.state.activeNode >= 0
+                        ? this.state.analyseData[this.state.activeNode].sql
+                        : ''}
+                    </code>
                   </div>
                 </div>
                 <div className="overflowAuto">
                   <div className="plansTitle">Execution Plan</div>
                   <div className="codeBlock">
-                    <AceEditor
-                      mode="json"
-                      theme="github"
-                      name="payload"
-                      value={
-                        this.state.activeNode >= 0
-                          ? this.state.analyseData[this.state.activeNode].plan
-                          : ''
-                      }
-                      minLines={4}
-                      maxLines={100}
-                      width="100%"
-                      showPrintMargin={false}
-                      showGutter={false}
-                    />
+                    <code>
+                      {this.state.activeNode >= 0
+                        ? this.state.analyseData[
+                            this.state.activeNode
+                          ].plan.join('')
+                        : ''}
+                    </code>
                   </div>
                 </div>
               </div>
