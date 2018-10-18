@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Modal from 'react-modal';
-
+import AceEditor from 'react-ace';
 export default class HasuraAnalyser extends React.Component {
   constructor() {
     super();
@@ -105,7 +105,7 @@ export default class HasuraAnalyser extends React.Component {
           <div className="modalTitle">Query Analysis</div>
           <div className="modalClose">
             <button onClick={clearAnalyse} className="form-control">
-              X
+              x
             </button>
           </div>
         </div>
@@ -118,22 +118,45 @@ export default class HasuraAnalyser extends React.Component {
           </div>
           <div className="wd75">
             <div className="analysisWrapper">
-              <div className="title textCenter">Analysis</div>
               <div className="plansWrapper">
-                <div className="wd40 borderRight overflowAuto">
+                <div className="overflowAuto">
                   <div className="plansTitle">Generated SQL</div>
                   <div className="codeBlock">
-                    {this.state.activeNode >= 0
-                      ? this.state.analyseData[this.state.activeNode].sql
-                      : ''}
+                    <AceEditor
+                      mode="json"
+                      theme="github"
+                      name="payload"
+                      value={
+                        this.state.activeNode >= 0
+                          ? this.state.analyseData[this.state.activeNode].sql
+                          : ''
+                      }
+                      minLines={4}
+                      maxLines={100}
+                      width="100%"
+                      showPrintMargin={false}
+                      showGutter={false}
+                    />
                   </div>
                 </div>
-                <div className="wd60 overflowAuto">
+                <div className="overflowAuto">
                   <div className="plansTitle">Execution Plan</div>
                   <div className="codeBlock">
-                    {this.state.activeNode >= 0
-                      ? this.state.analyseData[this.state.activeNode].plan
-                      : ''}
+                    <AceEditor
+                      mode="json"
+                      theme="github"
+                      name="payload"
+                      value={
+                        this.state.activeNode >= 0
+                          ? this.state.analyseData[this.state.activeNode].plan
+                          : ''
+                      }
+                      minLines={4}
+                      maxLines={100}
+                      width="100%"
+                      showPrintMargin={false}
+                      showGutter={false}
+                    />
                   </div>
                 </div>
               </div>
