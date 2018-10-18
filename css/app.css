@@ -653,24 +653,38 @@ div.CodeMirror-lint-tooltip > * + * {
 }
 .modalHeader
 {
+  background-color: #43495a;
   border-bottom: 1px solid #ccc;
   padding: 10px 20px;
   position: relative;
+  color: #ffc627;
+}
+.modalTitle
+{
+  font-size: 18px;
+  font-weight: 500;
 }
 .modalClose
 {
   position: absolute;
-  right: 20px;
+  right: 10px;
   top: 10px;
 }
 .modalClose button
 {
   cursor: pointer;
   border-radius: 5px;
+  border: 0;
+  background-color: transparent;
+  font-size: 16px;
+  font-weight: 700;
+  color: #ccc;
 }
 .modalClose button:hover
 {
-  background-color: #e7e7e7;
+  border: 0;
+  background-color: transparent;
+  color: #fff;
 }
 .modalClose button:focus
 {
@@ -679,26 +693,25 @@ div.CodeMirror-lint-tooltip > * + * {
 .modalBody
 {
   display: flex;
-  height: calc(100% - 39px);
+  height: 100%;
 }
 .topLevelNodesWrapper
 {
   border-right: 1px solid #ccc;
   height: calc(100% - 30px);
 }
-.topLevelNodesWrapper, .analysisWrapper
-{
-  margin-top: 30px;
-}
+
 .textCenter
 {
   text-align: center;
 }
-.title
+.topLevelNodesWrapper .title
 {
-  padding: 10px 20px;
-  border-bottom: 1px solid #ccc;
-  border-top: 1px solid #ccc;
+  padding: 15px 20px;
+  background-color: #fff3d5;
+  margin-bottom: 20px;
+  color: #767e93;
+  font-weight: 600;
 }
 .analysisWrapper
 {
@@ -727,21 +740,20 @@ div.CodeMirror-lint-tooltip > * + * {
 }
 .topLevelNodesWrapper ul li.active
 {
-  background-color: #e7e7e7;
+  color: #fd9540;
 }
 .topLevelNodesWrapper ul li:hover
 {
-  background-color: #e7e7e7;
+  color: #e2701a;
 }
 .plansWrapper
 {
-  display: flex;
-  height: calc(100% - 40px);
+
 }
 .plansTitle
 {
   padding: 10px 20px;
-  background-color: #eee;
+  padding-bottom: 0;
 }
 .overflowAuto
 {
@@ -750,6 +762,7 @@ div.CodeMirror-lint-tooltip > * + * {
 .codeBlock
 {
   padding: 10px 20px;
+  width: 60%;
 }
 
 .graphiql-container .analyse-button-wrap {
