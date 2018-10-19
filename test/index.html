@@ -142,8 +142,7 @@
           return fetch('http://localhost:8080/v1alpha1/graphql/explain', {
             method: 'post',
             headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json',
+              ...user.headers
             },
             body: JSON.stringify(editedQuery),
             credentials: 'include',
@@ -155,7 +154,7 @@
       ReactDOM.render(
         React.createElement(GraphiQL, {
           fetcher: graphQLFetcher,
-          analyzeFetcher: analyzeFetcher({}),
+          analyzeFetcher: analyzeFetcher({'x-hasura-access-key': 'abcd'}),
           supportAnalyze: true,
           query: parameters.query,
           variables: parameters.variables,

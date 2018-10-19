@@ -30,19 +30,27 @@ export default class AnalyseButton extends React.Component {
       let isOptions = false;
       options = (
         <ul className="execute-options">
-          {operations.filter(o => o.name && o.name.value).map(operation => {
-            isOptions = true;
-            return (
-              <li
-                key={operation.name ? operation.name.value : '*'}
-                className={(operation === highlight && 'selected') || null}
-                onMouseOver={() => this.setState({ highlight: operation })}
-                onMouseOut={() => this.setState({ highlight: null })}
-                onMouseUp={() => this._onOptionSelected(operation)}>
-                {operation.name ? operation.name.value : '<Unnamed>'}
-              </li>
-            );
-          })}
+          {operations
+            .filter(
+              o =>
+                o.name &&
+                o.name.value &&
+                o.operation &&
+                o.operation === 'query',
+            )
+            .map(operation => {
+              isOptions = true;
+              return (
+                <li
+                  key={operation.name ? operation.name.value : '*'}
+                  className={(operation === highlight && 'selected') || null}
+                  onMouseOver={() => this.setState({ highlight: operation })}
+                  onMouseOut={() => this.setState({ highlight: null })}
+                  onMouseUp={() => this._onOptionSelected(operation)}>
+                  {operation.name ? operation.name.value : '<Unnamed>'}
+                </li>
+              );
+            })}
         </ul>
       );
       options = isOptions ? options : null;
@@ -80,10 +88,11 @@ export default class AnalyseButton extends React.Component {
       parsedQuery = (this.props.query && parse(this.props.query)) || '';
       if (!parsedQuery) {
         // Don't do anything and return
+        throw new Error(`No valid query`);
         return;
       }
     } catch (e) {
-      throw new Error(`Error analysing query: ${e.message}.`);
+      throw new Error(`Error analysing query: ${e.message}`);
     }
     if (this.props.operations && this.props.operations.length > 1) {
       this.setState({ ...this.state, optionsOpen: !this.state.optionsOpen });

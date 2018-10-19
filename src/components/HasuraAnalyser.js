@@ -76,25 +76,32 @@ export default class HasuraAnalyser extends React.Component {
                 <div className="overflowAuto">
                   <div className="plansTitle">{'Generated SQL'}</div>
                   <div className="codeBlock">
-                    <pre>
-                      <code
-                        dangerouslySetInnerHTML={{
-                          __html:
-                            this.state.activeNode >= 0 &&
-                            this.state.analyseData.length > 0 &&
-                            window.hljs &&
-                            window.sqlFormatter &&
-                            window.hljs.highlight(
-                              'sql',
-                              window.sqlFormatter.format(
-                                this.state.analyseData[this.state.activeNode]
-                                  .sql,
-                                { language: 'sql' },
-                              ),
-                            ).value,
-                        }}
-                      />
-                    </pre>
+                    {window.hljs && window.sqlFormatter ? (
+                      <pre>
+                        <code
+                          dangerouslySetInnerHTML={{
+                            __html:
+                              this.state.activeNode >= 0 &&
+                              this.state.analyseData.length > 0 &&
+                              window.hljs.highlight(
+                                'sql',
+                                window.sqlFormatter.format(
+                                  this.state.analyseData[this.state.activeNode]
+                                    .sql,
+                                  { language: 'sql' },
+                                ),
+                              ).value,
+                          }}
+                        />
+                      </pre>
+                    ) : (
+                      <code>
+                        {this.state.activeNode >= 0 &&
+                        this.state.analyseData.length > 0
+                          ? this.state.analyseData[this.state.activeNode].sql
+                          : ''}
+                      </code>
+                    )}
                   </div>
                 </div>
                 <div className="overflowAuto">
