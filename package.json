@@ -1,6 +1,6 @@
 {
   "name": "hasura-console-graphiql",
-  "version": "0.0.1-temp-analyze.2",
+  "version": "0.0.6",
   "description": "A fork of GraphiQL for the console of Hasura GraphQL Engine.",
   "contributors": [
     "Hyohyeon Jeong <asiandrummer@fb.com>",

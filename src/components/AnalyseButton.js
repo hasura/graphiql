@@ -66,7 +66,7 @@ export default class AnalyseButton extends React.Component {
           onClick={this.handleAnalyseClick.bind(this)}
           onMouseDown={onMouseDown}
           title="Analyze Query"
-          label="Analyze"
+          label={this.state.isAnalysing ? 'Analyzing' : 'Analyze'}
         />
         {options}
         {this.state.analyseQuery ? (
