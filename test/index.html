@@ -27,7 +27,7 @@
     <script src="./vendor/react-dom-16.5.2.js"></script>
 
     <link rel="stylesheet"
-          href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.13.1/build/styles/default.min.css" />                                              
+          href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.13.1/build/styles/default.min.css" />
     <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.13.1/build/highlight.min.js"></script>
     <script type="text/javascript" src="https://unpkg.com/sql-formatter@latest/dist/sql-formatter.min.js"></script>
 
@@ -139,7 +139,7 @@
           user.role = 'admin';
           user.headers = header;
           editedQuery.user = user;
-          return fetch('https://hge-ci-pull-819.herokuapp.com/v1alpha1/graphql/explain', {
+          return fetch('https://hengine-2.herokuapp.com/v1alpha1/graphql/explain', {
             method: 'post',
             headers: {
             },

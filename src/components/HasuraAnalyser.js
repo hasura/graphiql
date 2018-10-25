@@ -73,63 +73,79 @@ export default class HasuraAnalyser extends React.Component {
           <div className="wd75">
             <div className="analysisWrapper">
               <div className="plansWrapper">
-                <div className="overflowAuto">
-                  <div className="plansTitle">{'Generated SQL'}</div>
-                  <div className="codeBlock">
-                    {window.hljs && window.sqlFormatter ? (
-                      <pre>
-                        <code
-                          dangerouslySetInnerHTML={{
-                            __html:
-                              this.state.activeNode >= 0 &&
-                              this.state.analyseData.length > 0 &&
-                              window.hljs.highlight(
-                                'sql',
-                                window.sqlFormatter.format(
-                                  this.state.analyseData[this.state.activeNode]
-                                    .sql,
-                                  { language: 'sql' },
-                                ),
-                              ).value,
-                          }}
-                        />
-                      </pre>
-                    ) : (
-                      <code>
-                        {this.state.activeNode >= 0 &&
-                        this.state.analyseData.length > 0
-                          ? this.state.analyseData[this.state.activeNode].sql
-                          : ''}
-                      </code>
-                    )}
+                <div className="plansTitle">{'Generated SQL'}</div>
+                <div className="codeBlock">
+                  <div className="copyGenerated">
+                    <img
+                      className={'img-responsive'}
+                      src={
+                        'https://filestore.hasura.io/v1/file/fc0e4b83-0da8-4284-9085-60550639d4ce'
+                      }
+                      alt={'Copy icon'}
+                    />
                   </div>
+                  {window.hljs && window.sqlFormatter ? (
+                    <pre>
+                      <code
+                        dangerouslySetInnerHTML={{
+                          __html:
+                            this.state.activeNode >= 0 &&
+                            this.state.analyseData.length > 0 &&
+                            window.hljs.highlight(
+                              'sql',
+                              window.sqlFormatter.format(
+                                this.state.analyseData[this.state.activeNode]
+                                  .sql,
+                                { language: 'sql' },
+                              ),
+                            ).value,
+                        }}
+                      />
+                    </pre>
+                  ) : (
+                    <code>
+                      {this.state.activeNode >= 0 &&
+                      this.state.analyseData.length > 0
+                        ? this.state.analyseData[this.state.activeNode].sql
+                        : ''}
+                    </code>
+                  )}
                 </div>
-                <div className="overflowAuto">
-                  <div className="plansTitle">{'Execution Plan'}</div>
-                  <div className="codeBlock">
-                    {/*
-                    <pre>
-                      <code>
-                        {this.state.activeNode >= 0
-                          && this.state.analyseData.length > 0
-                          ? this.state.analyseData[
-                              this.state.activeNode
-                            ].plan.map((k, i) => <div key={ i }>{k}</div> )
-                          : ''}
-                      </code>
-                    </pre>
-                    */}
-                    <pre>
-                      <code>
-                        {this.state.activeNode >= 0 &&
-                        this.state.analyseData.length > 0
-                          ? this.state.analyseData[
-                              this.state.activeNode
-                            ].plan.join('\n')
-                          : ''}
-                      </code>
-                    </pre>
+              </div>
+              <div className="plansWrapper">
+                <div className="plansTitle">{'Execution Plan'}</div>
+                <div className="codeBlock">
+                  <div className="copyExecution">
+                    <img
+                      className={'img-responsive'}
+                      src={
+                        'https://filestore.hasura.io/v1/file/fc0e4b83-0da8-4284-9085-60550639d4ce'
+                      }
+                      alt={'Copy icon'}
+                    />
                   </div>
+                  {/*
+                  <pre>
+                    <code>
+                      {this.state.activeNode >= 0
+                        && this.state.analyseData.length > 0
+                        ? this.state.analyseData[
+                            this.state.activeNode
+                          ].plan.map((k, i) => <div key={ i }>{k}</div> )
+                        : ''}
+                    </code>
+                  </pre>
+                  */}
+                  <pre>
+                    <code>
+                      {this.state.activeNode >= 0 &&
+                      this.state.analyseData.length > 0
+                        ? this.state.analyseData[
+                            this.state.activeNode
+                          ].plan.join('\n')
+                        : ''}
+                    </code>
+                  </pre>
                 </div>
               </div>
             </div>
