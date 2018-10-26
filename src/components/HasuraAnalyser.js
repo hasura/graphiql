@@ -36,6 +36,43 @@ export default class HasuraAnalyser extends React.Component {
         this.props.clearAnalyse();
       });
   }
+  copyToClip(type, id) {
+    let text = '';
+    if (this.state.analyseData.length > 0) {
+      if (type === 'sql') {
+        text = window.sqlFormatter
+          ? window.sqlFormatter.format(
+              this.state.analyseData[this.state.activeNode].sql,
+              { language: 'sql' },
+            )
+          : this.state.analyseData[this.state.activeNode].sql;
+      } else {
+        text = this.state.analyseData[this.state.activeNode].plan.join('\n');
+      }
+    }
+    var textArea = document.createElement('textarea');
+    textArea.value = text;
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+
+    try {
+      var successful = document.execCommand('copy');
+      var msg = successful ? 'successful' : 'unsuccessful';
+      var tooltip = document.getElementById(id);
+      tooltip.innerHTML = 'Copied';
+      if (!successful) {
+        throw new Error('Copy was unsuccessful');
+      }
+    } catch (err) {
+      alert('Oops, unable to copy - ' + err);
+    }
+    document.body.removeChild(textArea);
+  }
+  resetCopy(id) {
+    var tooltip = document.getElementById(id);
+    tooltip.innerHTML = 'Copy';
+  }
   render() {
     const { show, clearAnalyse } = this.props;
     const analysisList = this.state.analyseData.map((analysis, i) => {
@@ -76,13 +113,16 @@ export default class HasuraAnalyser extends React.Component {
                 <div className="plansTitle">{'Generated SQL'}</div>
                 <div className="codeBlock">
                   <div className="copyGenerated">
-                    <img
-                      className={'img-responsive'}
-                      src={
-                        'https://filestore.hasura.io/v1/file/fc0e4b83-0da8-4284-9085-60550639d4ce'
-                      }
-                      alt={'Copy icon'}
-                    />
+                    <div className="copyTooltip">
+                      <span className="tooltiptext" id="copySql">
+                        Copy
+                      </span>
+                      <i
+                        className={'fa fa-copy'}
+                        onClick={this.copyToClip.bind(this, 'sql', 'copySql')}
+                        onMouseLeave={this.resetCopy.bind(this, 'copySql')}
+                      />
+                    </div>
                   </div>
                   {window.hljs && window.sqlFormatter ? (
                     <pre>
@@ -116,13 +156,16 @@ export default class HasuraAnalyser extends React.Component {
                 <div className="plansTitle">{'Execution Plan'}</div>
                 <div className="codeBlock">
                   <div className="copyExecution">
-                    <img
-                      className={'img-responsive'}
-                      src={
-                        'https://filestore.hasura.io/v1/file/fc0e4b83-0da8-4284-9085-60550639d4ce'
-                      }
-                      alt={'Copy icon'}
-                    />
+                    <div className="copyTooltip">
+                      <span className="tooltiptext" id="copyPlan">
+                        Copy
+                      </span>
+                      <i
+                        className={'fa fa-copy'}
+                        onClick={this.copyToClip.bind(this, 'plan', 'copyPlan')}
+                        onMouseLeave={this.resetCopy.bind(this, 'copyPlan')}
+                      />
+                    </div>
                   </div>
                   {/*
                   <pre>
