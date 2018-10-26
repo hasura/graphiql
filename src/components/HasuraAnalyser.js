@@ -155,7 +155,7 @@ export default class HasuraAnalyser extends React.Component {
               <div className="plansWrapper">
                 <div className="plansTitle">{'Execution Plan'}</div>
                 <div className="codeBlock">
-                  <div className="copyExecution">
+                  <div className="copyGenerated">
                     <div className="copyTooltip">
                       <span className="tooltiptext" id="copyPlan">
                         Copy

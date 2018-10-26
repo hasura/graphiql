@@ -773,14 +773,7 @@ div.CodeMirror-lint-tooltip > * + * {
 {
   position: absolute;
   bottom: 30px;
-  right: 40px;
-  cursor: pointer;
-}
-.copyExecution
-{
-  position: absolute;
-  bottom: 30px;
-  right: 40px;
+  right: 60px;
   cursor: pointer;
 }
 .copyGenerated img, .copyExecution img
