@@ -771,16 +771,16 @@ div.CodeMirror-lint-tooltip > * + * {
 
 .copyGenerated
 {
-  position: fixed;
-  bottom: 51%;
-  right: 7%;
+  position: absolute;
+  bottom: 30px;
+  right: 40px;
   cursor: pointer;
 }
 .copyExecution
 {
-  position: fixed;
-  bottom: 10%;
-  right: 7%;
+  position: absolute;
+  bottom: 30px;
+  right: 40px;
   cursor: pointer;
 }
 .copyGenerated img, .copyExecution img
@@ -799,7 +799,7 @@ div.CodeMirror-lint-tooltip > * + * {
 
 .codeBlock
 {
-  position: relative;
+  /* position: relative; */
   padding: 10px 20px;
   width: 90%;
   background-color: rgb(253, 249, 237);
