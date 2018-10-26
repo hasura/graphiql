@@ -1,8 +1,7 @@
 /**
- *  Copyright (c) Facebook, Inc.
- *  All rights reserved.
+ *  Copyright (c) Facebook, Inc. and its affiliates.
  *
- *  This source code is licensed under the license found in the
+ *  This source code is licensed under the MIT license found in the
  *  LICENSE file in the root directory of this source tree.
  */
 
@@ -27,10 +26,21 @@ export default class TypeLink extends React.Component {
 
 function renderType(type, onClick) {
   if (type instanceof GraphQLNonNull) {
-    return <span>{renderType(type.ofType, onClick)}{'!'}</span>;
+    return (
+      <span>
+        {renderType(type.ofType, onClick)}
+        {'!'}
+      </span>
+    );
   }
   if (type instanceof GraphQLList) {
-    return <span>{'['}{renderType(type.ofType, onClick)}{']'}</span>;
+    return (
+      <span>
+        {'['}
+        {renderType(type.ofType, onClick)}
+        {']'}
+      </span>
+    );
   }
   return (
     <a className="type-name" onClick={event => onClick(type, event)}>

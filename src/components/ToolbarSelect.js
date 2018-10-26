@@ -1,8 +1,7 @@
 /**
- *  Copyright (c) Facebook, Inc.
- *  All rights reserved.
+ *  Copyright (c) Facebook, Inc. and its affiliates.
  *
- *  This source code is licensed under the license found in the
+ *  This source code is licensed under the MIT license found in the
  *  LICENSE file in the root directory of this source tree.
  */
 
@@ -112,11 +111,14 @@ export function ToolbarSelectOption({ onSelect, label, selected }) {
       onMouseDown={preventDefault}
       onMouseUp={onSelect}>
       {label}
-      {selected &&
+      {selected && (
         <svg width="13" height="13">
-          <polygon points="4.851,10.462 0,5.611 2.314,3.297 4.851,5.835
-            10.686,0 13,2.314 4.851,10.462" />
-        </svg>}
+          <polygon
+            points="4.851,10.462 0,5.611 2.314,3.297 4.851,5.835
+            10.686,0 13,2.314 4.851,10.462"
+          />
+        </svg>
+      )}
     </li>
   );
 }

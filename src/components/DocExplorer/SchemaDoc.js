@@ -1,8 +1,7 @@
 /**
- *  Copyright (c) Facebook, Inc.
- *  All rights reserved.
+ *  Copyright (c) Facebook, Inc. and its affiliates.
  *
- *  This source code is licensed under the license found in the
+ *  This source code is licensed under the MIT license found in the
  *  LICENSE file in the root directory of this source tree.
  */
 
@@ -39,21 +38,20 @@ export default class SchemaDoc extends React.Component {
           }
         />
         <div className="doc-category">
-          <div className="doc-category-title">
-            {'root types'}
-          </div>
+          <div className="doc-category-title">{'root types'}</div>
           <div className="doc-category-item">
             <span className="keyword">{'query'}</span>
             {': '}
             <TypeLink type={queryType} onClick={this.props.onClickType} />
           </div>
-          {mutationType &&
+          {mutationType && (
             <div className="doc-category-item">
               <span className="keyword">{'mutation'}</span>
               {': '}
               <TypeLink type={mutationType} onClick={this.props.onClickType} />
-            </div>}
-          {subscriptionType &&
+            </div>
+          )}
+          {subscriptionType && (
             <div className="doc-category-item">
               <span className="keyword">{'subscription'}</span>
               {': '}
@@ -61,7 +59,8 @@ export default class SchemaDoc extends React.Component {
                 type={subscriptionType}
                 onClick={this.props.onClickType}
               />
-            </div>}
+            </div>
+          )}
         </div>
       </div>
     );
