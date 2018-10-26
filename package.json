@@ -1,6 +1,6 @@
 {
   "name": "hasura-console-graphiql",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "A fork of GraphiQL for the console of Hasura GraphQL Engine.",
   "contributors": [
     "Hyohyeon Jeong <asiandrummer@fb.com>",
