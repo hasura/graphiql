@@ -23,8 +23,13 @@
     <!-- Included here to allow for testing offline -->
     <script src="./vendor/es6-promise.auto.js"></script>
     <script src="./vendor/fetch.min.js"></script>
-    <script src="./vendor/react-15.4.2.js"></script>
-    <script src="./vendor/react-dom-15.4.2.js"></script>
+    <script src="./vendor/react-16.5.2.js"></script>
+    <script src="./vendor/react-dom-16.5.2.js"></script>
+
+    <link rel="stylesheet"
+          href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.13.1/build/styles/default.min.css" />
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.13.1/build/highlight.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/sql-formatter@latest/dist/sql-formatter.min.js"></script>
 
     <!-- Load each file individually for better debugging  -->
     <!-- Note that in practice, a compiled graphiql.css is included -->
@@ -38,6 +43,7 @@
     <link rel="stylesheet" href="css/loading.css" />
     <link rel="stylesheet" href="css/show-hint.css" />
     <link rel="stylesheet" href="css/history.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
 
     <!-- Note: this resource is not a file, it is bundled live by the test server -->
     <script src="./graphiql.js"></script>
@@ -125,10 +131,31 @@
         });
       }
 
+      function analyzeFetcher(header) {
+        return (query) => {
+          const editedQuery = {
+            query,
+          };
+          let user = {};
+          user.role = 'admin';
+          user.headers = header;
+          editedQuery.user = user;
+          return fetch('https://hengine-2.herokuapp.com/v1alpha1/graphql/explain', {
+            method: 'post',
+            headers: {
+            },
+            body: JSON.stringify(editedQuery),
+            credentials: 'include',
+          });
+        }
+      }
+
       // Render <GraphiQL /> into the body.
       ReactDOM.render(
         React.createElement(GraphiQL, {
           fetcher: graphQLFetcher,
+          analyzeFetcher: analyzeFetcher({'x-hasura-access-key': 'abcd'}),
+          supportAnalyze: true,
           query: parameters.query,
           variables: parameters.variables,
           operationName: parameters.operationName,

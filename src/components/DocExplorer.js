@@ -1,8 +1,7 @@
 /**
- *  Copyright (c) Facebook, Inc.
- *  All rights reserved.
+ *  Copyright (c) Facebook, Inc. and its affiliates.
  *
- *  This source code is licensed under the license found in the
+ *  This source code is licensed under the MIT license found in the
  *  LICENSE file in the root directory of this source tree.
  */
 
@@ -71,11 +70,7 @@ export class DocExplorer extends React.Component {
     } else if (!schema) {
       // Schema is null when it explicitly does not exist, typically due to
       // an error during introspection.
-      content = (
-        <div className="error-container">
-          {'No Schema Available'}
-        </div>
-      );
+      content = <div className="error-container">{'No Schema Available'}</div>;
     } else if (navItem.search) {
       content = (
         <SearchResults
@@ -119,26 +114,26 @@ export class DocExplorer extends React.Component {
     return (
       <div className="doc-explorer" key={navItem.name}>
         <div className="doc-explorer-title-bar">
-          {prevName &&
+          {prevName && (
             <div
               className="doc-explorer-back"
               onClick={this.handleNavBackClick}>
               {prevName}
-            </div>}
+            </div>
+          )}
           <div className="doc-explorer-title">
             {navItem.title || navItem.name}
           </div>
-          <div className="doc-explorer-rhs">
-            {this.props.children}
-          </div>
+          <div className="doc-explorer-rhs">{this.props.children}</div>
         </div>
         <div className="doc-explorer-contents">
-          {shouldSearchBoxAppear &&
+          {shouldSearchBoxAppear && (
             <SearchBox
               value={navItem.search}
               placeholder={`Search ${navItem.name}...`}
               onSearch={this.handleSearch}
-            />}
+            />
+          )}
           {content}
         </div>
       </div>
