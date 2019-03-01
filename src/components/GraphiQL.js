@@ -278,8 +278,8 @@ export class GraphiQL extends React.Component {
         {this.props.toggleExplorer && (
           <ToolbarButton
             onClick={this.props.toggleExplorer}
-            title="Explorer"
-            label="Toggle Explorer"
+            title="Toggle Explorer"
+            label="Explorer"
           />
         )}
       </GraphiQL.Toolbar>
