@@ -287,7 +287,7 @@ export class GraphiQL extends React.Component {
           <ToolbarButton
             onClick={this.handleVoyager}
             title="Voyager"
-            label="Voyager "
+            label="Voyager"
             icon={<i class="fa fa-external-link" aria-hidden="true" />}
           />
         )}
