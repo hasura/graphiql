@@ -50,7 +50,7 @@ export class GraphiQL extends React.Component {
     fetcher: PropTypes.func.isRequired,
     analyzeFetcher: PropTypes.func,
     supportAnalyze: PropTypes.bool,
-    voyagerUrl: PropTypes.bool,
+    voyagerUrl: PropTypes.string,
     schema: PropTypes.instanceOf(GraphQLSchema),
     query: PropTypes.string,
     variables: PropTypes.string,
