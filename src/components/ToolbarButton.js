@@ -18,6 +18,7 @@ export class ToolbarButton extends React.Component {
     onClick: PropTypes.func,
     title: PropTypes.string,
     label: PropTypes.string,
+    icon: PropTypes.element,
   };
 
   constructor(props) {
@@ -33,7 +34,10 @@ export class ToolbarButton extends React.Component {
         onMouseDown={preventDefault}
         onClick={this.handleClick}
         title={error ? error.message : this.props.title}>
-        {this.props.label}
+        <span>
+          {this.props.label}
+          {this.props.icon ? this.props.icon : null}
+        </span>
       </a>
     );
   }

@@ -50,6 +50,7 @@ export class GraphiQL extends React.Component {
     fetcher: PropTypes.func.isRequired,
     analyzeFetcher: PropTypes.func,
     supportAnalyze: PropTypes.bool,
+    voyagerUrl: PropTypes.string,
     schema: PropTypes.instanceOf(GraphQLSchema),
     query: PropTypes.string,
     variables: PropTypes.string,
@@ -280,6 +281,14 @@ export class GraphiQL extends React.Component {
             onClick={this.props.toggleExplorer}
             title="Toggle Explorer"
             label="Explorer"
+          />
+        )}
+        {this.props.voyagerUrl && (
+          <ToolbarButton
+            onClick={this.handleVoyager}
+            title="Voyager"
+            label="Voyager"
+            icon={<i class="fa fa-external-link" aria-hidden="true" />}
           />
         )}
       </GraphiQL.Toolbar>
@@ -841,6 +850,11 @@ export class GraphiQL extends React.Component {
     this.handleEditVariables(variables);
     this.handleEditOperationName(operationName);
   };
+
+  handleVoyager = () => {
+    window.open(this.props.voyagerUrl, '_blank');
+  };
+
   handleResizeStart = downEvent => {
     if (!this._didClickDragBar(downEvent)) {
       return;
