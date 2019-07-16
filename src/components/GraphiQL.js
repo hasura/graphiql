@@ -69,6 +69,7 @@ export class GraphiQL extends React.Component {
     getDefaultFieldNames: PropTypes.func,
     editorTheme: PropTypes.string,
     onToggleHistory: PropTypes.func,
+    toggleExplorer: PropTypes.func,
     ResultsTooltip: PropTypes.any,
   };
 
@@ -276,19 +277,19 @@ export class GraphiQL extends React.Component {
             {...this.state}
           />
         ) : null}
-        {this.props.toggleExplorer && (
+        {Boolean(this.props.toggleExplorer) && (
           <ToolbarButton
-            onClick={this.props.toggleExplorer}
+            onClick={this.handleToggleExplorer}
             title="Toggle Explorer"
             label="Explorer"
           />
         )}
-        {this.props.voyagerUrl && (
+        {Boolean(this.props.voyagerUrl) && (
           <ToolbarButton
             onClick={this.handleVoyager}
             title="Voyager"
             label="Voyager"
-            icon={<i class="fa fa-external-link" aria-hidden="true" />}
+            icon={<i className="fa fa-external-link" aria-hidden="true" />}
           />
         )}
       </GraphiQL.Toolbar>
@@ -646,6 +647,10 @@ export class GraphiQL extends React.Component {
     this.setState({ docExplorerOpen: true }, () => {
       this.docExplorerComponent.showDocForReference(reference);
     });
+  };
+
+  handleToggleExplorer = () => {
+    this.props.toggleExplorer();
   };
 
   handleRunQuery = selectedOperationName => {

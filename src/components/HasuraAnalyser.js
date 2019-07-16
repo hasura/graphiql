@@ -19,8 +19,8 @@ export default class HasuraAnalyser extends React.Component {
         if (r.ok) {
           return r.json();
         }
-        return r.text().then(r => {
-          return Promise.reject(new Error(r));
+        return r.text().then(rText => {
+          return Promise.reject(new Error(rText));
         });
       })
       .then(data => {
@@ -35,43 +35,6 @@ export default class HasuraAnalyser extends React.Component {
         alert(errorMessage);
         this.props.clearAnalyse();
       });
-  }
-  copyToClip(type, id) {
-    let text = '';
-    if (this.state.analyseData.length > 0) {
-      if (type === 'sql') {
-        text = window.sqlFormatter
-          ? window.sqlFormatter.format(
-              this.state.analyseData[this.state.activeNode].sql,
-              { language: 'sql' },
-            )
-          : this.state.analyseData[this.state.activeNode].sql;
-      } else {
-        text = this.state.analyseData[this.state.activeNode].plan.join('\n');
-      }
-    }
-    var textArea = document.createElement('textarea');
-    textArea.value = text;
-    document.body.appendChild(textArea);
-    textArea.focus();
-    textArea.select();
-
-    try {
-      var successful = document.execCommand('copy');
-      var msg = successful ? 'successful' : 'unsuccessful';
-      var tooltip = document.getElementById(id);
-      tooltip.innerHTML = 'Copied';
-      if (!successful) {
-        throw new Error('Copy was unsuccessful');
-      }
-    } catch (err) {
-      alert('Oops, unable to copy - ' + err);
-    }
-    document.body.removeChild(textArea);
-  }
-  resetCopy(id) {
-    var tooltip = document.getElementById(id);
-    tooltip.innerHTML = 'Copy';
   }
   render() {
     const { show, clearAnalyse } = this.props;
@@ -115,7 +78,7 @@ export default class HasuraAnalyser extends React.Component {
                   <div className="copyGenerated">
                     <div className="copyTooltip">
                       <span className="tooltiptext" id="copySql">
-                        Copy
+                        {'Copy'}
                       </span>
                       <i
                         className={'fa fa-copy'}
@@ -158,7 +121,7 @@ export default class HasuraAnalyser extends React.Component {
                   <div className="copyGenerated">
                     <div className="copyTooltip">
                       <span className="tooltiptext" id="copyPlan">
-                        Copy
+                        {'Copy'}
                       </span>
                       <i
                         className={'fa fa-copy'}
@@ -217,6 +180,42 @@ export default class HasuraAnalyser extends React.Component {
       nodeKey = parseInt(nodeKey, 10);
       this.setState({ ...this.state, activeNode: nodeKey });
     }
+  }
+  copyToClip(type, id) {
+    let text = '';
+    if (this.state.analyseData.length > 0) {
+      if (type === 'sql') {
+        text = window.sqlFormatter
+          ? window.sqlFormatter.format(
+              this.state.analyseData[this.state.activeNode].sql,
+              { language: 'sql' },
+            )
+          : this.state.analyseData[this.state.activeNode].sql;
+      } else {
+        text = this.state.analyseData[this.state.activeNode].plan.join('\n');
+      }
+    }
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+
+    try {
+      const successful = document.execCommand('copy');
+      const tooltip = document.getElementById(id);
+      tooltip.innerHTML = 'Copied';
+      if (!successful) {
+        throw new Error('Copy was unsuccessful');
+      }
+    } catch (err) {
+      alert('Oops, unable to copy - ' + err);
+    }
+    document.body.removeChild(textArea);
+  }
+  resetCopy(id) {
+    const tooltip = document.getElementById(id);
+    tooltip.innerHTML = 'Copy';
   }
 }
 
