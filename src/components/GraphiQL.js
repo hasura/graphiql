@@ -283,12 +283,12 @@ export class GraphiQL extends React.Component {
             label="Explorer"
           />
         )}
-        {this.props.voyagerUrl && (
+        {!!this.props.voyagerUrl && (
           <ToolbarButton
             onClick={this.handleVoyager}
             title="Voyager"
             label="Voyager"
-            icon={<i class="fa fa-external-link" aria-hidden="true" />}
+            icon={<i className="fa fa-external-link" aria-hidden="true" />}
           />
         )}
       </GraphiQL.Toolbar>
