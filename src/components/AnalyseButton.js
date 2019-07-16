@@ -89,7 +89,6 @@ export default class AnalyseButton extends React.Component {
       if (!parsedQuery) {
         // Don't do anything and return
         throw new Error(`No valid query`);
-        return;
       }
     } catch (e) {
       throw new Error(`Error analysing query: ${e.message}`);

@@ -105,7 +105,7 @@
     "max-statements": 0,
     "new-cap": 0,
     "newline-after-var": 0,
-    "no-alert": 2,
+    "no-alert": 0,
     "no-array-constructor": 2,
     "no-await-in-loop": 2,
     "no-bitwise": 0,
