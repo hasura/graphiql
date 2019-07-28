@@ -285,15 +285,13 @@ export class GraphiQL extends React.Component {
             label="Explorer"
           />
         )}
-        {
-          Boolean(this.props.toggleExporter) && (
-            <ToolbarButton
-              onClick={this.handleToggleExporter}
-              title="Toggle Exporter"
-              label="Exporter"
-            />
-          )
-        }
+        {Boolean(this.props.toggleExporter) && (
+          <ToolbarButton
+            onClick={this.handleToggleExporter}
+            title="Toggle Exporter"
+            label="Code Exporter"
+          />
+        )}
         {Boolean(this.props.voyagerUrl) && (
           <ToolbarButton
             onClick={this.handleVoyager}
@@ -665,7 +663,7 @@ export class GraphiQL extends React.Component {
 
   handleToggleExporter = () => {
     this.props.toggleExporter();
-  }
+  };
 
   handleRunQuery = selectedOperationName => {
     this._editorQueryID++;
